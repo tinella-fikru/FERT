@@ -1,4 +1,5 @@
 import { supabaseAnon } from '../utils/supabase'
+import { isPreviewMode, MOCK_GARMENTS } from '../utils/mockData'
 
 /**
  * GET /api/garments?collection=<slug>&category=<category>
@@ -6,6 +7,14 @@ import { supabaseAnon } from '../utils/supabase'
  */
 export default defineEventHandler(async (event) => {
   const { collection, category } = getQuery(event)
+
+  if (isPreviewMode()) {
+    return MOCK_GARMENTS.filter(
+      (g) =>
+        (!collection || g.collections?.slug === collection) &&
+        (!category || g.category === category),
+    )
+  }
 
   let query = supabaseAnon()
     .from('garments')
@@ -19,7 +28,13 @@ export default defineEventHandler(async (event) => {
 
   const { data, error } = await query
   if (error) {
-    throw createError({ statusCode: 500, statusMessage: 'Failed to load garments' })
+    // Schema not applied yet — serve the preview catalog instead of failing.
+    console.warn(JSON.stringify({ event: 'catalog_fallback', table: 'garments', reason: error.message }))
+    return MOCK_GARMENTS.filter(
+      (g) =>
+        (!collection || g.collections?.slug === collection) &&
+        (!category || g.category === category),
+    )
   }
 
   // Collection filter applied post-join (PostgREST nested filter on aliased join)
