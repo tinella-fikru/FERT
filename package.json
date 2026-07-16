@@ -1,0 +1,26 @@
+{
+  "name": "fert-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@clerk/nuxt": "^1.0.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "gsap": "^3.12.5",
+    "nuxt": "^3.13.0",
+    "resend": "^4.0.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/tailwindcss": "^6.12.0"
+  }
+}

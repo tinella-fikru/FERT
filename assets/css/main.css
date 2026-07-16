@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   FERT — global styles
+   Minimalist monochrome editorial + tilet gold. Zero radius, no shadows.
+--------------------------------------------------------------------------- */
+
+@layer base {
+  :root {
+    --color-ink: #0a0a0a;
+    --color-paper: #fafaf8;
+    --color-gold: #b98a2f;
+  }
+
+  html {
+    @apply antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-body text-base leading-relaxed;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-ink text-paper;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  /* Visible focus for keyboard users — never removed, only styled */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  button,
+  [role='button'],
+  a {
+    @apply cursor-pointer;
+    touch-action: manipulation;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Small-caps label used across nav, eyebrows, metadata */
+  .label-caps {
+    @apply font-mono text-[0.6875rem] uppercase tracking-caps;
+  }
+
+  /* Primary CTA: hard-edged, instant inversion on press */
+  .btn-primary {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 border border-ink bg-ink px-8 py-3 text-paper label-caps transition-colors duration-200 ease-editorial hover:bg-paper hover:text-ink active:bg-gold active:border-gold active:text-ink disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-secondary {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 border border-ink bg-transparent px-8 py-3 text-ink label-caps transition-colors duration-200 ease-editorial hover:bg-ink hover:text-paper disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-gold {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 border border-gold bg-gold px-8 py-3 text-ink label-caps transition-colors duration-200 ease-editorial hover:bg-gold-deep hover:border-gold-deep hover:text-paper disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  /* Underlined editorial text link */
+  .link-editorial {
+    @apply underline decoration-1 underline-offset-4 transition-colors duration-200 hover:decoration-gold hover:text-gold-deep;
+  }
+
+  /* Full-bleed hard rule between sections */
+  .rule-hard {
+    @apply h-[3px] w-full bg-ink;
+  }
+
+  .input-field {
+    @apply w-full border border-line bg-white px-4 py-3 text-ink transition-colors duration-200 placeholder:text-ink-soft/50 focus:border-ink focus:outline-none aria-[invalid=true]:border-danger;
+    min-height: 44px;
+  }
+
+  .field-label {
+    @apply mb-2 block label-caps text-ink-soft;
+  }
+
+  .field-error {
+    @apply mt-1.5 text-sm text-danger;
+  }
+}
+
+@layer utilities {
+  /* Elements animated in by GSAP start hidden only when JS is running */
+  .js .gsap-reveal {
+    opacity: 0;
+  }
+
+  /* Subtle paper noise (opacity 0.03 per design system) */
+  .texture-paper {
+    position: relative;
+  }
+  .texture-paper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
