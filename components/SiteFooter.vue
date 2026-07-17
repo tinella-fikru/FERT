@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { BRAND } from '~/shared/brand'
+
 const year = new Date().getFullYear()
 </script>
 
@@ -8,11 +10,48 @@ const year = new Date().getFullYear()
       <div class="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1fr]">
         <!-- Brand -->
         <div>
-          <p class="font-display text-4xl font-bold tracking-[0.2em]">FERT</p>
+          <NuxtLink to="/" class="inline-block">
+            <img
+              src="/images/fert-logo.jpg"
+              alt="FERT Design — home"
+              class="h-24 w-24 object-cover"
+              width="96"
+              height="96"
+              loading="lazy"
+            />
+          </NuxtLink>
           <p class="mt-4 max-w-xs text-sm leading-relaxed text-paper/60">
             Traditional Ethiopian clothing, handwoven and made to order in our
             Addis Ababa atelier.
           </p>
+          <!-- Social -->
+          <div class="mt-6 flex items-center gap-3">
+            <a
+              :href="BRAND.instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="FERT Design on Instagram"
+              class="flex h-11 w-11 items-center justify-center border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
+            >
+              <BrandIcon name="instagram" />
+            </a>
+            <a
+              :href="BRAND.facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="FERT Design on Facebook"
+              class="flex h-11 w-11 items-center justify-center border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
+            >
+              <BrandIcon name="facebook" />
+            </a>
+            <a
+              :href="BRAND.phoneHref"
+              :aria-label="`Call FERT Design on ${BRAND.phone}`"
+              class="flex h-11 w-11 items-center justify-center border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
+            >
+              <BrandIcon name="phone" />
+            </a>
+          </div>
         </div>
 
         <!-- Shop -->
@@ -35,18 +74,36 @@ const year = new Date().getFullYear()
           </ul>
         </nav>
 
-        <!-- Contact -->
+        <!-- Visit -->
         <div>
           <p class="label-caps mb-4 text-gold">Visit</p>
-          <address class="space-y-3 text-sm not-italic text-paper/70">
-            <p>Bole, Addis Ababa<br />Ethiopia</p>
-            <p><a href="mailto:atelier@fert.et" class="hover:text-paper">atelier@fert.et</a></p>
-          </address>
+          <ul class="space-y-3 text-sm">
+            <li v-for="branch in BRAND.branches" :key="branch.name">
+              <a
+                :href="branch.mapUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex items-start gap-2 text-paper/70 transition-colors hover:text-gold"
+              >
+                <BrandIcon name="location" size="h-4 w-4 mt-0.5 shrink-0" />
+                <span>{{ branch.name }}<span class="block text-xs text-paper/40 group-hover:text-gold/60">Addis Ababa · View on map</span></span>
+              </a>
+            </li>
+            <li>
+              <a :href="BRAND.phoneHref" class="flex items-center gap-2 text-paper/70 hover:text-gold">
+                <BrandIcon name="phone" size="h-4 w-4 shrink-0" />
+                {{ BRAND.phone }}
+              </a>
+            </li>
+            <li>
+              <a :href="`mailto:${BRAND.email}`" class="text-paper/70 hover:text-paper">{{ BRAND.email }}</a>
+            </li>
+          </ul>
         </div>
       </div>
 
       <div class="mt-14 flex flex-col gap-3 border-t border-paper/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <p class="label-caps text-paper/40">© {{ year }} FERT — Addis Ababa</p>
+        <p class="label-caps text-paper/40">© {{ year }} FERT Design — Addis Ababa</p>
         <p class="label-caps text-paper/40">Woven with tibeb</p>
       </div>
     </div>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Collection, Garment } from '~/shared/types'
 import { formatEtb, CATEGORY_LABELS } from '~/shared/types'
+import { BRAND } from '~/shared/brand'
 
 const { data: collections } = await useFetch<Collection[]>('/api/collections', {
   default: () => [],
@@ -58,7 +59,15 @@ useHead({
       ref="hero"
       class="texture-paper relative flex min-h-[92dvh] flex-col justify-between overflow-hidden bg-ink text-paper"
     >
-      <div class="flex flex-1 items-center justify-center px-4">
+      <div class="flex flex-1 flex-col items-center justify-center gap-8 px-4">
+        <img
+          src="/images/fert-logo.jpg"
+          alt=""
+          aria-hidden="true"
+          class="hero-meta h-28 w-28 object-cover sm:h-36 sm:w-36"
+          width="144"
+          height="144"
+        />
         <h1
           class="font-display text-display-xl font-black text-gold"
           aria-label="FERT"
@@ -80,10 +89,42 @@ useHead({
           Traditional Ethiopian clothing, handwoven and made to order in our
           Addis Ababa atelier.
         </p>
-        <NuxtLink to="/collections" class="hero-meta group flex items-center gap-3 label-caps text-paper">
-          <span class="h-px w-10 bg-gold transition-all duration-300 group-hover:w-16" aria-hidden="true" />
-          Discover the collections
-        </NuxtLink>
+
+        <!-- Social + contact -->
+        <div class="hero-meta flex items-center gap-4">
+          <a
+            :href="BRAND.instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="FERT Design on Instagram"
+            class="flex h-11 w-11 items-center justify-center text-paper/60 transition-colors duration-200 hover:text-gold"
+          >
+            <BrandIcon name="instagram" />
+          </a>
+          <a
+            :href="BRAND.facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="FERT Design on Facebook"
+            class="flex h-11 w-11 items-center justify-center text-paper/60 transition-colors duration-200 hover:text-gold"
+          >
+            <BrandIcon name="facebook" />
+          </a>
+          <a
+            :href="BRAND.branches[0].mapUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="FERT Design on Google Maps"
+            class="flex h-11 w-11 items-center justify-center text-paper/60 transition-colors duration-200 hover:text-gold"
+          >
+            <BrandIcon name="location" />
+          </a>
+          <span class="h-6 w-px bg-paper/20" aria-hidden="true" />
+          <NuxtLink to="/collections" class="group flex items-center gap-3 label-caps text-paper">
+            <span class="h-px w-10 bg-gold transition-all duration-300 group-hover:w-16" aria-hidden="true" />
+            Discover the collections
+          </NuxtLink>
+        </div>
       </div>
     </section>
 
