@@ -54,8 +54,10 @@ export interface TibebPattern {
   slug: string
   name: string
   description: string | null
+  story: string | null
   price_delta_etb: number
   image_url: string | null
+  image_urls: string[]
   available: boolean
 }
 

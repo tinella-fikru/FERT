@@ -43,6 +43,8 @@ useHead({ title: 'Appointments — FERT Admin' })
       </div>
       <div class="flex items-center gap-4">
         <NuxtLink to="/admin" class="btn-secondary">Pipeline</NuxtLink>
+        <NuxtLink to="/admin/garments" class="btn-secondary">Garments</NuxtLink>
+        <NuxtLink to="/admin/designs" class="btn-secondary">Designs</NuxtLink>
         <button type="button" class="btn-primary" @click="refresh()">Refresh</button>
       </div>
     </div>

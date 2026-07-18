@@ -53,6 +53,8 @@ useHead({ title: 'Pipeline — FERT Admin' })
         <h1 class="font-display text-display-md">Order pipeline</h1>
       </div>
       <div class="flex items-center gap-4">
+        <NuxtLink to="/admin/garments" class="btn-secondary">Garments</NuxtLink>
+        <NuxtLink to="/admin/designs" class="btn-secondary">Designs</NuxtLink>
         <NuxtLink to="/admin/appointments" class="btn-secondary">Appointments</NuxtLink>
         <button type="button" class="btn-primary" @click="refresh()">Refresh</button>
       </div>

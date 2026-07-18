@@ -97,7 +97,7 @@ useHead({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="FERT Design on Instagram"
-            class="flex h-11 w-11 items-center justify-center text-paper/60 transition-colors duration-200 hover:text-gold"
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 text-paper/60 transition-colors duration-200 hover:border-gold hover:text-gold"
           >
             <BrandIcon name="instagram" />
           </a>
@@ -106,7 +106,7 @@ useHead({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="FERT Design on Facebook"
-            class="flex h-11 w-11 items-center justify-center text-paper/60 transition-colors duration-200 hover:text-gold"
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 text-paper/60 transition-colors duration-200 hover:border-gold hover:text-gold"
           >
             <BrandIcon name="facebook" />
           </a>
@@ -115,7 +115,7 @@ useHead({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="FERT Design on Google Maps"
-            class="flex h-11 w-11 items-center justify-center text-paper/60 transition-colors duration-200 hover:text-gold"
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 text-paper/60 transition-colors duration-200 hover:border-gold hover:text-gold"
           >
             <BrandIcon name="location" />
           </a>

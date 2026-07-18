@@ -14,8 +14,10 @@ const props = withDefaults(
     /** dark = ink block w/ paper text; light = muted paper block */
     tone?: 'dark' | 'light' | 'gold'
     label?: string
+    /** cover crops to fill (default); contain shows the whole image */
+    fit?: 'cover' | 'contain'
   }>(),
-  { ratio: '3/4', tone: 'light', src: null, label: '' },
+  { ratio: '3/4', tone: 'light', src: null, label: '', fit: 'cover' },
 )
 
 const toneClasses = computed(
@@ -44,7 +46,8 @@ const bandOffset = computed(() => {
       v-if="src"
       :src="src"
       :alt="alt"
-      class="absolute inset-0 h-full w-full object-cover"
+      class="absolute inset-0 h-full w-full"
+      :class="fit === 'contain' ? 'object-contain' : 'object-cover'"
       loading="lazy"
     />
     <div

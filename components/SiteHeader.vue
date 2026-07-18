@@ -67,47 +67,68 @@ const primaryNav = [
     </nav>
 
     <!-- Full-screen menu drawer -->
-    <Transition
-      enter-active-class="transition-transform duration-300 ease-editorial"
-      enter-from-class="-translate-y-full"
-      leave-active-class="transition-transform duration-200 ease-in"
-      leave-to-class="-translate-y-full"
-    >
-      <div
-        v-if="menuOpen"
-        id="site-menu"
-        class="fixed inset-0 z-overlay flex flex-col bg-ink text-paper"
+    <!-- Teleported to <body>: the header uses backdrop-blur, which would
+         otherwise trap this fixed overlay inside the 64px header box and
+         let the page show through behind the menu. -->
+    <Teleport to="body">
+      <!-- Dimmed backdrop (desktop): click to close. -->
+      <Transition
+        enter-active-class="transition-opacity duration-300"
+        enter-from-class="opacity-0"
+        leave-active-class="transition-opacity duration-200"
+        leave-to-class="opacity-0"
       >
-        <div class="flex h-16 items-center justify-between px-4 sm:px-8">
-          <span class="label-caps text-paper/60">FERT — Addis Ababa</span>
-          <button
-            type="button"
-            class="flex min-h-[44px] min-w-[44px] items-center justify-center label-caps"
-            @click="menuOpen = false"
-          >
-            Close
-          </button>
-        </div>
-        <ul class="flex flex-1 flex-col justify-center gap-2 px-4 sm:px-8">
-          <li v-for="item in primaryNav" :key="item.to">
-            <NuxtLink
-              :to="item.to"
-              class="group flex items-baseline gap-4 py-2 font-display text-display-md transition-colors hover:text-gold"
+        <div
+          v-if="menuOpen"
+          class="fixed inset-0 z-overlay bg-ink/40 backdrop-blur-sm"
+          aria-hidden="true"
+          @click="menuOpen = false"
+        />
+      </Transition>
+
+      <!-- Panel: full-screen on phones, side panel on desktop. -->
+      <Transition
+        enter-active-class="transition-transform duration-300 ease-editorial"
+        enter-from-class="-translate-x-full"
+        leave-active-class="transition-transform duration-200 ease-in"
+        leave-to-class="-translate-x-full"
+      >
+        <div
+          v-if="menuOpen"
+          id="site-menu"
+          class="fixed inset-y-0 left-0 z-overlay flex w-full flex-col bg-ink text-paper shadow-2xl sm:w-1/2 lg:w-1/3 lg:max-w-md"
+        >
+          <div class="flex h-16 items-center justify-between px-4 sm:px-8">
+            <span class="label-caps text-paper/60">FERT — Addis Ababa</span>
+            <button
+              type="button"
+              class="flex min-h-[44px] min-w-[44px] items-center justify-center label-caps"
+              @click="menuOpen = false"
             >
-              {{ item.label }}
-              <span
-                class="label-caps translate-y-0 text-gold opacity-0 transition-opacity group-hover:opacity-100"
-                aria-hidden="true"
-                >→</span
+              Close
+            </button>
+          </div>
+          <ul class="flex flex-1 flex-col justify-center gap-2 px-4 sm:px-8">
+            <li v-for="item in primaryNav" :key="item.to">
+              <NuxtLink
+                :to="item.to"
+                class="group flex items-baseline gap-4 py-2 font-display text-display-md transition-colors hover:text-gold"
               >
-            </NuxtLink>
-          </li>
-        </ul>
-        <div class="flex items-center justify-between border-t border-paper/20 px-4 py-5 sm:px-8">
-          <NuxtLink to="/account" class="label-caps text-paper/70 hover:text-gold">Account</NuxtLink>
-          <span class="label-caps text-paper/40">Est. Addis Ababa</span>
+                {{ item.label }}
+                <span
+                  class="label-caps translate-y-0 text-gold opacity-0 transition-opacity group-hover:opacity-100"
+                  aria-hidden="true"
+                  >→</span
+                >
+              </NuxtLink>
+            </li>
+          </ul>
+          <div class="flex items-center justify-between border-t border-paper/20 px-4 py-5 sm:px-8">
+            <NuxtLink to="/account" class="label-caps text-paper/70 hover:text-gold">Account</NuxtLink>
+            <span class="label-caps text-paper/40">Est. Addis Ababa</span>
+          </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </Teleport>
   </header>
 </template>

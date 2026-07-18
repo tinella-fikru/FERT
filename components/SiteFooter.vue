@@ -31,7 +31,7 @@ const year = new Date().getFullYear()
               target="_blank"
               rel="noopener noreferrer"
               aria-label="FERT Design on Instagram"
-              class="flex h-11 w-11 items-center justify-center border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
+              class="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
             >
               <BrandIcon name="instagram" />
             </a>
@@ -40,14 +40,14 @@ const year = new Date().getFullYear()
               target="_blank"
               rel="noopener noreferrer"
               aria-label="FERT Design on Facebook"
-              class="flex h-11 w-11 items-center justify-center border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
+              class="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
             >
               <BrandIcon name="facebook" />
             </a>
             <a
               :href="BRAND.phoneHref"
               :aria-label="`Call FERT Design on ${BRAND.phone}`"
-              class="flex h-11 w-11 items-center justify-center border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
+              class="flex h-11 w-11 items-center justify-center rounded-full border border-paper/25 text-paper/70 transition-colors duration-200 hover:border-gold hover:text-gold"
             >
               <BrandIcon name="phone" />
             </a>
