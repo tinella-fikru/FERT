@@ -54,8 +54,10 @@ create table tibeb_patterns (
   slug text unique not null,
   name text not null,
   description text,
+  story text,
   price_delta_etb numeric(12,2) default 0,
   image_url text,
+  image_urls text[] default '{}',
   available boolean default true
 );
 
