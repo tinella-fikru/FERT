@@ -87,19 +87,59 @@ interface AppointmentEmailData {
     email: string
     preferred_date: string
     preferred_time: string
+    scheduled_at?: string | null
     purpose: string | null
   }
 }
 
+interface FittingInviteData {
+  order: { order_number: string }
+  customer: { email: string; full_name: string | null }
+  bookingUrl: string
+}
+
+export async function sendFittingInvite({ order, customer, bookingUrl }: FittingInviteData) {
+  const body = `
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#3F3F46;">
+      ${customer.full_name ?? 'Dear customer'}, your garment is ready. Please book
+      a fitting appointment at a time that suits you.
+    </p>
+    <table role="presentation" width="100%" style="border-top:1px solid #E4E4E7;">
+      ${row('Order', order.order_number)}
+    </table>
+    <p style="margin:24px 0 0;text-align:center;">
+      <a href="${bookingUrl}" style="display:inline-block;background:#0A0A0A;color:#ffffff;padding:13px 22px;text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;">
+        Book your fitting
+      </a>
+    </p>`
+
+  await resend().emails.send({
+    from: FROM,
+    to: customer.email,
+    subject: `Order ${order.order_number} is ready for fitting — FERT`,
+    html: shell('Your garment is ready', body),
+  })
+}
+
+/** Format an ISO instant as Addis Ababa wall-clock time, e.g. "10:00". */
+function addisTime(iso: string): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Africa/Addis_Ababa',
+  }).format(new Date(iso))
+}
+
 export async function sendAppointmentReceived({ appointment }: AppointmentEmailData) {
+  const timeLabel = appointment.scheduled_at
+    ? addisTime(appointment.scheduled_at)
+    : appointment.preferred_time === 'morning' ? 'Morning (9:00–12:00)' : 'Afternoon (13:00–18:00)'
   const body = `
     <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#3F3F46;">
       ${appointment.full_name}, we have received your appointment request and
-      will confirm the exact time by email within one working day.
+      will confirm by email within one working day.
     </p>
     <table role="presentation" width="100%" style="border-top:1px solid #E4E4E7;">
-      ${row('Date requested', appointment.preferred_date)}
-      ${row('Time', appointment.preferred_time === 'morning' ? 'Morning (9:00–12:00)' : 'Afternoon (13:00–18:00)')}
+      ${row('Date', appointment.preferred_date)}
+      ${row('Time', timeLabel)}
       ${row('Purpose', appointment.purpose ?? 'Consultation')}
     </table>
     <p style="margin:24px 0 0;font-size:14px;line-height:1.6;color:#3F3F46;">

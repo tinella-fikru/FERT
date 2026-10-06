@@ -41,6 +41,7 @@ export async function chapaInitialize(params: {
       first_name: firstName,
       last_name: rest.join(' ') || '-',
       tx_ref: params.txRef,
+      callback_url: `${config.public.siteUrl}/api/webhooks/chapa`,
       return_url: params.returnUrl,
       'customization[title]': 'FERT Atelier', // Chapa title limit: 16 chars
       'customization[description]': 'Made-to-order garment',

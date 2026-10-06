@@ -21,6 +21,7 @@ export default defineNuxtConfig({
     // Server-only
     supabaseServiceRoleKey: '',
     chapaSecretKey: '',
+    chapaWebhookSecret: '',
     resendApiKey: '',
     adminEmails: '',
     public: {

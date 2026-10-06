@@ -1,13 +1,13 @@
 import { requireCustomer } from '../../utils/auth'
 import { supabaseAdmin } from '../../utils/supabase'
 import { chapaVerify } from '../../utils/chapa'
-import { sendOrderConfirmation } from '../../utils/email'
+import { settleVerifiedPayment } from '../../utils/payments'
 
 /**
  * POST /api/orders/verify — body { ref }
  * Called by the confirmation page after Chapa redirects back.
- * Verifies server-to-server with Chapa, then (idempotently) marks the
- * order paid, logs the event, and sends the confirmation email.
+ * Verifies server-to-server with Chapa, then (idempotently) settles the
+ * payment via the shared ledger helper (same path as the webhook).
  */
 export default defineEventHandler(async (event) => {
   const customer = await requireCustomer(event)
@@ -41,26 +41,17 @@ export default defineEventHandler(async (event) => {
     verification.currency === 'ETB'
 
   if (verification?.status === 'success' && amountMatches) {
-    await db
-      .from('orders')
-      .update({ status: 'paid', paid_at: new Date().toISOString() })
-      .eq('id', order.id)
-      .eq('status', 'pending_payment') // guard against concurrent verify
-
-    await db.from('order_status_events').insert({
-      order_id: order.id,
-      status: 'paid',
-      note: 'Payment verified via Chapa',
-    })
-
-    console.log(JSON.stringify({ event: 'payment_verified', order_id: order.id, tx_ref: ref }))
-
-    // Email failure must never fail the verification response.
-    try {
-      await sendOrderConfirmation({ order, customer })
-    } catch (e) {
-      console.error(JSON.stringify({ event: 'email_failed', order_id: order.id, error: String(e) }))
-    }
+    await settleVerifiedPayment(
+      db,
+      order,
+      {
+        txRef: ref,
+        amount: Number(verification.amount),
+        currency: verification.currency,
+        chapaStatus: verification.status,
+      },
+      customer,
+    )
 
     return { status: 'paid', order_number: order.order_number }
   }

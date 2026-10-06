@@ -100,6 +100,7 @@ export interface Appointment {
   phone: string | null
   preferred_date: string
   preferred_time: 'morning' | 'afternoon'
+  scheduled_at: string | null
   purpose: string | null
   status: AppointmentStatus
   admin_note: string | null

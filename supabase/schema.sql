@@ -102,6 +102,20 @@ create table order_status_events (
   created_at timestamptz default now()
 );
 
+-- ---------- Payments ledger --------------------------------------------------
+-- Every confirmed Chapa transaction lands here exactly once (tx_ref unique =
+-- idempotency key). Written only by the server (webhook / verify endpoint).
+create table payments (
+  id uuid primary key default gen_random_uuid(),
+  order_id uuid references orders(id) not null,
+  tx_ref text unique not null,
+  amount_etb numeric(12,2) not null,
+  currency text not null default 'ETB',
+  chapa_status text not null,                  -- raw status from Chapa verify
+  raw_payload jsonb,
+  created_at timestamptz default now()
+);
+
 -- ---------- Appointments ---------------------------------------------------
 create table appointments (
   id uuid primary key default gen_random_uuid(),
@@ -111,17 +125,23 @@ create table appointments (
   phone text,
   preferred_date date not null,
   preferred_time text not null,               -- 'morning' | 'afternoon'
+  scheduled_at timestamptz,                    -- exact slot start (hourly)
   purpose text,                                -- fitting, consultation, pickup
   status appointment_status default 'requested',
   admin_note text,
   created_at timestamptz default now()
 );
 
+-- Double-booking protection: one active appointment per exact slot.
+create unique index uniq_active_slot on appointments (scheduled_at)
+  where scheduled_at is not null and status in ('requested', 'confirmed');
+
 -- ---------- Indexes --------------------------------------------------------
 create index idx_garments_collection on garments(collection_id) where published;
 create index idx_orders_customer on orders(customer_id);
 create index idx_orders_status on orders(status);
 create index idx_appointments_date on appointments(preferred_date);
+create index idx_payments_order on payments(order_id);
 
 -- ---------- updated_at trigger ---------------------------------------------
 create or replace function set_updated_at() returns trigger as $$
@@ -154,6 +174,7 @@ alter table customers enable row level security;
 alter table orders enable row level security;
 alter table order_status_events enable row level security;
 alter table appointments enable row level security;
+alter table payments enable row level security;
 
 -- Public (anon) may read the published catalog only
 create policy "public read published collections"
